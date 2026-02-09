@@ -1,8 +1,202 @@
 <!doctype html>
-<html>
-<head><meta charset="utf-8"><title>Sara Chopra</title></head>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sara Chopra — Science Communication & Physics</title>
+
+  <style>
+    :root{
+      --bg:#0b0d12;
+      --card:#121622;
+      --text:#f2f4f8;
+      --muted:#b7bfd6;
+      --accent:#2aa8ff;
+      --radius:18px;
+    }
+
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height:1.55;
+    }
+
+    a{color:inherit; text-decoration:none;}
+
+    .wrap{
+      max-width:1100px;
+      margin:auto;
+      padding:clamp(20px,5vw,64px);
+    }
+
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:80px;
+    }
+
+    .logo{
+      font-weight:800;
+      letter-spacing:.03em;
+    }
+
+    nav a{
+      margin-left:24px;
+      color:var(--muted);
+    }
+
+    nav a:hover{color:var(--text);}
+
+    .hero{
+      max-width:720px;
+    }
+
+    .hero h1{
+      font-size:clamp(36px,5vw,64px);
+      line-height:1.05;
+      margin:0 0 20px;
+    }
+
+    .hero p{
+      color:var(--muted);
+      font-size:18px;
+    }
+
+    .cta{
+      margin-top:32px;
+      display:flex;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      padding:14px 20px;
+      border-radius:12px;
+      background:var(--accent);
+      color:#000;
+      font-weight:700;
+    }
+
+    .btn.secondary{
+      background:transparent;
+      border:1px solid rgba(255,255,255,.2);
+      color:var(--text);
+    }
+
+    section{
+      margin-top:120px;
+    }
+
+    h2{
+      margin-bottom:28px;
+      font-size:28px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:24px;
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:24px;
+      transition:transform .2s ease, box-shadow .2s ease;
+      border:1px solid rgba(255,255,255,.06);
+    }
+
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 20px 60px rgba(0,0,0,.4);
+    }
+
+    .card h3{
+      margin:0 0 8px;
+    }
+
+    .card p{
+      color:var(--muted);
+      font-size:15px;
+    }
+
+    footer{
+      margin-top:140px;
+      padding:40px 0;
+      color:var(--muted);
+      font-size:14px;
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+  </style>
+</head>
+
 <body>
-  <h1>Sara Chopra</h1>
-  <p>Portfolio site coming soon.</p>
+  <div class="wrap">
+
+    <header>
+      <div class="logo">Sara Chopra</div>
+      <nav>
+        <a href="portfolio/">Portfolio</a>
+        <a href="application/">Application</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <h1>
+        Physics-trained<br>
+        Science Communicator
+      </h1>
+      <p>
+        I translate complex research in particle physics, detectors, and
+        quantum science into clear, visual, and engaging formats — from
+        interactive web explainers to public-facing content.
+      </p>
+
+      <div class="cta">
+        <a class="btn" href="portfolio/">View Portfolio</a>
+        <a class="btn secondary" href="application/">Applications & CV</a>
+      </div>
+    </section>
+
+    <section>
+      <h2>Featured Work</h2>
+      <div class="grid">
+
+        <a class="card" href="portfolio/projects/cms-web-infographic/">
+          <h3>CMS Web Infographic</h3>
+          <p>
+            Interactive explainer on how the CMS detector works at CERN,
+            combining physics accuracy with scrollytelling.
+          </p>
+        </a>
+
+        <div class="card">
+          <h3>CUI Research Outreach</h3>
+          <p>
+            Visual and written communication for interdisciplinary research
+            at the Cluster of Excellence for Advanced Imaging of Matter.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Talks & Teaching</h3>
+          <p>
+            Interactive lectures and workshops for school students and
+            non-specialist audiences.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <footer>
+      © 2026 Sara Chopra · Hamburg · Science Communication & Physics
+    </footer>
+
+  </div>
 </body>
 </html>
