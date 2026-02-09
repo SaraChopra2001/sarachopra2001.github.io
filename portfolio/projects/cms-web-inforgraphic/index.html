@@ -1,1 +1,1116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CMS Web Infographic</title>
+
+  <style>
+    :root{
+      color-scheme: dark;
+      --bg:#000;
+      --text:rgba(255,255,255,.95);
+      --muted:rgba(255,255,255,.74);
+      --accent:#2aa8ff;
+      --accent2:#3533cd;
+      --ease:cubic-bezier(.2,.8,.2,1);
+
+      --fontH:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",system-ui,Arial,sans-serif;
+      --fontB:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,Arial,sans-serif;
+
+      --pad: clamp(18px, 4vw, 64px);
+    }
+
+    html,body{height:100%;}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:var(--fontB);
+      overflow-x:hidden;
+    }
+
+    a{color:inherit;}
+    img{max-width:100%; height:auto; display:block;}
+
+    .heroScrolly, .deckWrap{
+      position: relative;
+      z-index: 1;
+    }
+
+    .heroVideo{
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;   /* fills full hero */
+      z-index: 0;
+      opacity: 1;       /* adjust */
+      pointer-events: none;
+    }
+
+    .heroVideoOverlay{
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: radial-gradient(1200px 700px at 50% 40%,
+        rgba(0,0,0,0.15),
+        rgba(0,0,0,0.70));
+      pointer-events: none;
+    }
+
+
+    /* =========================
+       HERO
+    ========================== */
+    .heroScrolly{
+      height: 180vh;
+      position: relative;
+    }
+    .heroStage{
+      position: sticky;
+      top:0;
+      height:100vh;
+      padding: 0 var(--pad);
+      box-sizing: border-box;
+      display:grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 26px;
+      align-items:center;
+    }
+
+
+    @media (max-width: 980px){
+      .heroStage{
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        gap: 18px;
+        padding-top: 18px;
+        align-items:start;
+      }
+    }
+
+    .heroTitle{
+      font-family: var(--fontH);
+      font-size: clamp(64px, 7.4vw, 150px);
+      line-height: 0.90;
+      position: relative; z-index: 3;
+      margin: 0;
+      font-weight: 950;
+      letter-spacing: .01em;
+      text-transform: uppercase;
+      text-shadow: 0 0 14px rgba(42,168,255,0.12);
+      will-change: transform, opacity, filter;
+    }
+
+    .heroLeft{
+      position: relative;
+      z-index: 3;
+      display:flex;
+      align-items:center;
+    }
+
+    .heroRight{
+      position: relative;
+      z-index: 3;
+      height: min(92vh, 980px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .heroImage{
+      width: min(2600px, 240%);
+      height: 100%;
+      object-fit: contain;
+      transform-origin: 50% 50%;
+      will-change: transform, opacity;
+      filter: drop-shadow(0 26px 80px rgba(0,0,0,0.75));
+      pointer-events: none;
+    }
+
+    @media (max-width: 980px){
+      .heroRight{ height: min(58vh, 560px); }
+      .heroImage{ width: 118%; }
+      .heroTitle{ font-size: clamp(46px, 9vw, 96px); }
+    }
+
+    /* =========================
+       DECK
+    ========================== */
+    .deckWrap{
+      height: 420vh; /* 4 panels (0..3) */
+      position: relative;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .deckStage{
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 16px var(--pad) 22px;
+      box-sizing: border-box;
+      display:grid;
+      grid-template-rows: auto 1fr;
+      gap: 16px;
+    }
+
+    .deckHeader{
+      position: relative;
+      padding-top: 8px;
+      pointer-events: auto;
+      z-index: 5;
+      transition: opacity 260ms var(--ease), transform 260ms var(--ease);
+    }
+
+    /* Hide header after Components (when we enter step 3) */
+    .deckWrap.nav-hidden .deckHeader{
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-8px);
+    }
+
+    .stripTrack{
+      position: relative;
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      align-items:center;
+    }
+
+    .stripTrack::before{
+      content:"";
+      position:absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 2px;
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+    }
+
+    .stripItem{
+      position: relative;
+      z-index: 1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height: 44px;
+      padding: 0 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(12,14,18,0.58);
+      color: rgba(255,255,255,0.92);
+      text-decoration: none;
+      font-family: var(--fontH);
+      font-size: 15px;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      font-weight: 850;
+      backdrop-filter: blur(10px);
+      transition: transform 220ms var(--ease),
+                  border-color 220ms var(--ease),
+                  background 220ms var(--ease),
+                  box-shadow 220ms var(--ease);
+      cursor: pointer;
+    }
+
+    .stripItem::after{
+      content:"";
+      position:absolute;
+      bottom: -15px;
+      left: 50%;
+      width: 14px;
+      height: 14px;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      border: 2px solid rgba(255,255,255,0.50);
+      background: rgba(0,0,0,0.6);
+      box-shadow: 0 0 0 0 rgba(42,168,255,0.0);
+      transition: box-shadow 220ms var(--ease), transform 220ms var(--ease), border-color 220ms var(--ease);
+    }
+
+    .stripItem:hover{
+      transform: translateY(-5px) scale(1.02);
+      border-color: rgba(42,168,255,0.60);
+      background: rgba(14,18,24,0.82);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.50);
+    }
+
+    .stripItem:hover::after{
+      box-shadow: 0 0 0 8px rgba(42,168,255,0.12);
+      transform: translateX(-50%) scale(1.05);
+      border-color: rgba(42,168,255,0.75);
+    }
+
+    .stripItem.is-active{
+      border-color: rgba(42,168,255,0.80);
+      background: rgba(42,168,255,0.10);
+      box-shadow: 0 18px 70px rgba(0,0,0,0.55);
+    }
+
+    .stripItem.is-active::after{
+      border-color: rgba(42,168,255,0.90);
+      box-shadow: 0 0 0 10px rgba(42,168,255,0.10);
+    }
+
+    .deckPanels{
+      position: relative;
+      z-index: 3;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background:
+        radial-gradient(1100px 540px at 26% -10%, rgba(42,168,255,0.12), transparent 55%),
+        radial-gradient(900px 500px at 100% 30%, rgba(53,51,205,0.10), transparent 55%),
+        rgba(8,10,14,0.72);
+      overflow: hidden;
+      box-shadow: 0 24px 90px rgba(0,0,0,0.55);
+    }
+
+    .panel{
+      position: absolute;
+      inset: 0;
+      padding: 0;
+      box-sizing: border-box;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px) scale(0.995);
+      filter: blur(6px);
+      transition:
+        opacity 420ms var(--ease),
+        transform 420ms var(--ease),
+        filter 420ms var(--ease);
+    }
+
+    .panel.is-active{
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+
+    /* =========================
+       SLIDE FULL-COVER
+    ========================== */
+    .slideStage{
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    .slideImg{
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+    }
+
+    /* =========================
+       Panel 1: GIF overlay pinned to the *visible* image box
+       We compute the displayed image rect and set CSS vars.
+    ========================== */
+    .howMedia{
+      position:absolute;
+      inset:0;
+      border-radius: 18px;
+      overflow:hidden;
+    }
+
+    /* CSS vars set by JS: --imgLeft, --imgTop, --imgW, --imgH */
+    .gifOverlay{
+      position: absolute;
+      z-index: 4;
+
+      /* place relative to rendered image area (not the whole container) */
+      left: calc(var(--imgLeft, 0px) + var(--imgW, 100%) * 0.46);
+      top:  calc(var(--imgTop, 0px)  + var(--imgH, 100%) * 0.15);
+
+      width: min(720px, calc(var(--imgW, 100%) * 0.72));
+      max-width: calc(var(--imgW, 100%) * 0.75);
+
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(12,14,18,0.45);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 22px 80px rgba(0,0,0,0.65);
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .gifOverlay img{
+      width: 100%;
+      height: auto;
+      display: block;
+      opacity: 0.95;
+    }
+
+    @media (max-width: 980px){
+      .gifOverlay{
+        left: calc(var(--imgLeft, 0px) + var(--imgW, 100%) * 0.08);
+        top:  calc(var(--imgTop, 0px)  + var(--imgH, 100%) * 0.56);
+        width: min(420px, calc(var(--imgW, 100%) * 0.84));
+        max-width: calc(var(--imgW, 100%) * 0.92);
+      }
+    }
+
+    /* =========================
+       Panel 3: "How CMS photographs particles?"
+    ========================= */
+    .photoStage{
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .photoBgVideo{
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      z-index: 0;         /* key: behind ::before */
+      pointer-events: none;
+    }
+
+
+    .photoStage::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: url("assets/works_cms_img.png") center / cover no-repeat;
+      opacity: 0.25;
+      pointer-events:none;
+      z-index: 1;
+    }
+
+    .photoStage::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: radial-gradient(1200px 700px at 50% 55%, rgba(0,0,0,0.06), rgba(0,0,0,0.62));
+      pointer-events:none;
+      z-index: 2;
+    }
+
+    .photoStage{
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    /* Keep overlays and UI above the video */
+    .photoStage::after{ z-index: 1; }        /* your vignette */
+    .photoCornerBtn{ z-index: 4; }
+    .photoTitleWrap{ z-index: 3; }
+    .photoModal{ z-index: 10; }
+
+
+    .photoTitleWrap{
+      position: absolute;
+      z-index: 3;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -54%);
+      text-align: center;
+      width: min(760px, 84vw);
+      pointer-events: none;
+    }
+
+    .photoTitle{
+      margin: 0;
+      font-family: var(--fontH);
+      font-weight: 950;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      font-size: clamp(28px, 3.6vw, 54px);
+      line-height: 1.02;
+      color: rgba(255,255,255,0.94);
+      text-shadow: 0 20px 60px rgba(0,0,0,0.7);
+    }
+
+    .photoSub{
+      margin: 12px auto 0;
+      color: rgba(255,255,255,0.80);
+      font-size: 14.5px;
+      line-height: 1.45;
+      max-width: 62ch;
+    }
+
+    .photoCornerBtn{
+      position: absolute;
+      z-index: 4;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+
+      min-height: 52px;
+      padding: 0 18px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(12,14,18,0.58);
+      backdrop-filter: blur(10px);
+
+      color: rgba(255,255,255,0.92);
+      font-family: var(--fontH);
+      font-size: 14px;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      font-weight: 900;
+
+      cursor: pointer;
+      transition: transform 220ms var(--ease),
+                  border-color 220ms var(--ease),
+                  background 220ms var(--ease),
+                  box-shadow 220ms var(--ease);
+    }
+
+    /* make BENDING button noticeably larger */
+    .photoCornerBtn[data-key="bend"]{
+      min-height: 60px;
+      padding: 0 24px;
+      font-size: 15px;
+      border-color: rgba(255,255,255,0.18);
+    }
+
+    .photoCornerBtn span{
+      opacity: 0.7;
+      font-size: 12px;
+      letter-spacing: .12em;
+    }
+
+    .photoCornerBtn:hover{
+      transform: translateY(-4px);
+      border-color: rgba(42,168,255,0.60);
+      background: rgba(14,18,24,0.82);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.50);
+    }
+
+    .photoCornerBtn[data-key="bend"]  { left: 22px; top: 22px; }
+    .photoCornerBtn[data-key="track"] { right: 22px; top: 22px; }
+    .photoCornerBtn[data-key="energy"]{ left: 22px; bottom: 22px; }
+    .photoCornerBtn[data-key="muon"]  { right: 22px; bottom: 22px; }
+
+    @media (max-width: 980px){
+      .photoCornerBtn[data-key="bend"],
+      .photoCornerBtn[data-key="track"]{ top: 14px; }
+      .photoCornerBtn[data-key="energy"],
+      .photoCornerBtn[data-key="muon"]{ bottom: 14px; }
+
+      .photoCornerBtn[data-key="bend"],
+      .photoCornerBtn[data-key="energy"]{ left: 14px; }
+      .photoCornerBtn[data-key="track"],
+      .photoCornerBtn[data-key="muon"]{ right: 14px; }
+
+      .photoTitleWrap{ transform: translate(-50%, -52%); }
+    }
+
+    /* =========================
+       Popup modal
+    ========================= */
+    .photoModal{
+      position:absolute;
+      inset:0;
+      z-index: 10;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: clamp(12px, 3vw, 28px);
+    }
+
+    .photoModal.is-open{ display:flex; }
+
+    .photoModalBackdrop{
+      position:absolute;
+      inset:0;
+      background: rgba(0,0,0,0.62);
+      backdrop-filter: blur(6px);
+    }
+
+    .photoModalCard{
+      position: relative;
+      width: min(1240px, 92vw);
+      max-height: min(80vh, 900px);
+      overflow: hidden;
+
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background:
+        radial-gradient(900px 450px at 20% -10%, rgba(42,168,255,0.14), transparent 55%),
+        radial-gradient(700px 420px at 100% 20%, rgba(53,51,205,0.12), transparent 55%),
+        rgba(10,12,16,0.90);
+
+      box-shadow: 0 28px 110px rgba(0,0,0,0.70);
+      padding: clamp(22px, 3vw, 34px);
+
+      transform: translateY(10px) scale(0.995);
+      opacity: 0;
+      animation: photoPopIn 260ms var(--ease) forwards;
+    }
+
+    @keyframes photoPopIn{
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    .photoModalTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .photoModalTitle{
+      margin: 0;
+      font-family: var(--fontH);
+      font-size: clamp(18px, 2.2vw, 26px);
+      letter-spacing: .02em;
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+
+    .photoModalClose{
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(12,14,18,0.55);
+      color: rgba(255,255,255,0.92);
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      font-family: var(--fontH);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 900;
+      transition: transform 200ms var(--ease), border-color 200ms var(--ease), background 200ms var(--ease);
+    }
+    .photoModalClose:hover{
+      transform: translateY(-2px);
+      border-color: rgba(42,168,255,0.60);
+      background: rgba(14,18,24,0.80);
+    }
+
+    .photoModalGrid{
+      display:grid;
+      grid-template-columns: 1fr 1.8fr;
+      gap: 18px;
+      align-items:start;
+    }
+
+    @media (max-width: 980px){
+      .photoModalGrid{ grid-template-columns: 1fr; }
+    }
+
+    /* Left side column layout so footer can sit at the bottom-left */
+    .photoModalLeft{
+      display:flex;
+      flex-direction:column;
+      min-height: 260px;
+    }
+
+    .photoModalBody{
+      color: rgba(255,255,255,0.86);
+      font-size: 16px;
+      line-height: 1.55;
+
+      /* what you asked: center the block, justify the text */
+      max-width: 66ch;
+      margin: 0 auto;
+      text-align: justify;
+      text-justify: inter-word;
+    }
+    .photoModalBody p{ margin: 0 0 12px; }
+    .photoModalBody ul{ margin: 0 0 12px 18px; }
+    .photoModalBody li{ margin: 6px 0; }
+
+    .photoModalImgSlot{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.35);
+      height: min(62vh, 620px);
+      overflow: hidden;
+      padding: 10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .photoModalImgSlot img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      display: block;
+      opacity: 0.95;
+    }
+
+    /* Bottom-left buttons (instead of bottom citation line) */
+    .photoModalFooter{
+      margin-top: auto;
+      padding-top: 14px;
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      gap: 10px;
+    }
+
+    .photoModalLink{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(12,14,18,0.55);
+      text-decoration: none;
+      color: rgba(255,255,255,0.92);
+      font-family: var(--fontH);
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 900;
+      transition: transform 220ms var(--ease), border-color 220ms var(--ease), background 220ms var(--ease);
+    }
+
+    .photoModalLink:hover{
+      transform: translateY(-2px);
+      border-color: rgba(42,168,255,0.60);
+      background: rgba(14,18,24,0.80);
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <!-- HERO -->
+<section class="heroScrolly" id="heroScrolly">
+  <div class="heroStage">
+
+    <!-- VIDEO BACKGROUND -->
+    <video class="heroVideo" autoplay muted loop playsinline>
+      <source src="assets/cmsbg1.mp4" type="video/mp4">
+    </video>
+
+    <!-- OPTIONAL DARK OVERLAY -->
+    <div class="heroVideoOverlay"></div>
+
+    <div class="heroLeft">
+      <h1 class="heroTitle" id="heroTitle">
+        THE COMPACT<br>
+        MUON SOLENOID (CMS)
+      </h1>
+    </div>
+
+    <div class="heroRight">
+      <img class="heroImage" id="heroImage" src="assets/cms_exploded.png" alt="CMS detector hero" />
+    </div>
+
+  </div>
+</section>
+
+
+  <!-- DECK -->
+  <section class="deckWrap" id="deckWrap">
+    <div class="deckStage">
+
+      <header class="deckHeader" id="deckHeader">
+        <nav class="stripTrack" aria-label="CMS deck navigation">
+          <a class="stripItem is-active" href="#about" data-step="0">About CMS</a>
+          <a class="stripItem" href="#how" data-step="1">How it works</a>
+          <a class="stripItem" href="#components" data-step="2">Components</a>
+        </nav>
+      </header>
+
+      <div class="deckPanels" id="deckPanels">
+
+        <!-- Panel 0 -->
+        <article class="panel is-active" data-step="0" id="about">
+          <div class="slideStage">
+            <img class="slideImg" src="Section_Images/about.png" alt="About CMS" />
+          </div>
+        </article>
+
+        <!-- Panel 1 -->
+        <article class="panel" data-step="1" id="how">
+          <div class="slideStage">
+            <div class="howMedia" id="howMedia">
+              <img class="slideImg" id="howBaseImg" src="Section_Images/works.png" alt="How CMS works" />
+              <div class="gifOverlay" id="howGifOverlay" aria-hidden="true">
+                <img src="assets/detectoroverview.gif" alt="Detector overview animation" />
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Panel 2 -->
+        <article class="panel" data-step="2" id="components">
+          <div class="slideStage">
+            <img class="slideImg" src="Section_Images/components.png" alt="CMS components" />
+          </div>
+        </article>
+
+        <!-- Panel 3 -->
+        <article class="panel" data-step="3" id="photographs">
+          <div class="photoStage">
+
+            <video class="photoBgVideo" autoplay muted loop playsinline>
+              <source src="assets/cmsbg2.mp4" type="video/mp4">
+            </video>
+
+            <button class="photoCornerBtn" type="button" data-key="bend">
+              Bending Particles <span>01</span>
+            </button>
+
+            <button class="photoCornerBtn" type="button" data-key="track">
+              Identifying Tracks <span>02</span>
+            </button>
+
+            <button class="photoCornerBtn" type="button" data-key="energy">
+              Measuring Energy <span>03</span>
+            </button>
+
+            <button class="photoCornerBtn" type="button" data-key="muon">
+              Detecting Muons <span>04</span>
+            </button>
+
+            <div class="photoTitleWrap">
+              <h2 class="photoTitle">How CMS “Photographs” Particles?</h2>
+              <p class="photoSub">Tap a step to see what CMS measures and why it matters.</p>
+            </div>
+
+            <!-- Popup modal -->
+            <div class="photoModal" id="photoModal" aria-hidden="true">
+              <div class="photoModalBackdrop" data-close="1"></div>
+
+              <div class="photoModalCard" role="dialog" aria-modal="true" aria-labelledby="photoModalTitle">
+                <div class="photoModalTop">
+                  <h3 class="photoModalTitle" id="photoModalTitle">Title</h3>
+                  <button class="photoModalClose" type="button" data-close="1">Close</button>
+                </div>
+
+                <div class="photoModalGrid">
+                  <div class="photoModalLeft">
+                    <div class="photoModalBody" id="photoModalBody"></div>
+
+                    <!-- Bottom-left links -->
+                    <div class="photoModalFooter" id="photoModalFooter"></div>
+                  </div>
+
+                  <div class="photoModalImgSlot">
+                    <img id="photoModalImg" src="" alt="" />
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const clamp01 = (x) => Math.max(0, Math.min(1, x));
+    const smoothstep = (t) => t * t * (3 - 2 * t);
+
+    const heroScrolly = document.getElementById("heroScrolly");
+    const heroTitle = document.getElementById("heroTitle");
+    const heroImage = document.getElementById("heroImage");
+    const deckWrap = document.getElementById("deckWrap");
+
+    // HERO animation
+    function animateHero(){
+      const r = heroScrolly.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const total = r.height - vh;
+      const progressed = -r.top;
+      const t = total > 0 ? clamp01(progressed / total) : 0;
+      const s = smoothstep(t);
+
+      heroTitle.style.filter = `blur(${12 * s}px)`;
+      heroTitle.style.opacity = String(1 - 0.92 * s);
+      heroTitle.style.transform = `translateY(${(-10 * s)}px)`;
+
+      const scale = 1.02 + 0.35 * s;
+      const y = (-160 * s);
+      const opacity = 1 - 0.50 * s;
+
+      heroImage.style.opacity = String(opacity);
+      heroImage.style.transform = `translate(0px, ${y}px) scale(${scale})`;
+    }
+
+    window.addEventListener("scroll", animateHero, { passive: true });
+    window.addEventListener("resize", animateHero);
+    animateHero();
+
+    // -----------------------------
+    // DECK slide swap (scroll-driven) steps 0..3
+    // -----------------------------
+    const panels = Array.from(document.querySelectorAll(".panel"));
+    const navItems = Array.from(document.querySelectorAll(".stripItem"));
+
+    function setActiveStep(step){
+      panels.forEach(p => p.classList.toggle("is-active", Number(p.dataset.step) === step));
+      navItems.forEach(a => a.classList.toggle("is-active", Number(a.dataset.step) === step));
+    }
+
+    function getDeckProgress(){
+      const r = deckWrap.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const total = r.height - vh;
+      const progressed = -r.top;
+      return total > 0 ? clamp01(progressed / total) : 0;
+    }
+
+    function onDeckScroll(){
+      const t = getDeckProgress();
+      let step = 0;
+      if (t >= 0.75) step = 3;
+      else if (t >= 0.50) step = 2;
+      else if (t >= 0.25) step = 1;
+
+      setActiveStep(step);
+
+      // hide top nav once we reach step 3
+      deckWrap.classList.toggle("nav-hidden", step >= 3);
+    }
+
+    window.addEventListener("scroll", onDeckScroll, { passive: true });
+    window.addEventListener("resize", onDeckScroll);
+    onDeckScroll();
+
+    // Clicking top nav pills scrolls to steps 0..2 only
+    function scrollDeckToStep(step){
+      const vh = window.innerHeight;
+      const r = deckWrap.getBoundingClientRect();
+      const deckTop = r.top + window.scrollY;
+      const deckScrollable = deckWrap.offsetHeight - vh;
+
+      const targetT = step === 0 ? 0.02 : (step === 1 ? 0.30 : 0.58);
+      window.scrollTo({ top: deckTop + deckScrollable * targetT, behavior: "smooth" });
+    }
+
+    navItems.forEach(a => {
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        scrollDeckToStep(Number(a.dataset.step));
+      });
+    });
+
+    // -----------------------------
+    // Fix GIF overlay placement with object-fit: contain
+    // We compute the actually rendered image rectangle inside its container.
+    // -----------------------------
+    const howMedia = document.getElementById("howMedia");
+    const howBaseImg = document.getElementById("howBaseImg");
+
+    function setContainBoxCSSVars(containerEl, imgEl){
+      if (!containerEl || !imgEl) return;
+      const cw = containerEl.clientWidth;
+      const ch = containerEl.clientHeight;
+
+      const nw = imgEl.naturalWidth || 1;
+      const nh = imgEl.naturalHeight || 1;
+      const imgAR = nw / nh;
+      const contAR = cw / ch;
+
+      let w, h, left, top;
+
+      // contain logic
+      if (imgAR > contAR){
+        w = cw;
+        h = cw / imgAR;
+        left = 0;
+        top = (ch - h) / 2;
+      } else {
+        h = ch;
+        w = ch * imgAR;
+        top = 0;
+        left = (cw - w) / 2;
+      }
+
+      containerEl.style.setProperty("--imgLeft", `${left}px`);
+      containerEl.style.setProperty("--imgTop", `${top}px`);
+      containerEl.style.setProperty("--imgW", `${w}px`);
+      containerEl.style.setProperty("--imgH", `${h}px`);
+    }
+
+    function updateHowOverlay(){
+      setContainBoxCSSVars(howMedia, howBaseImg);
+    }
+
+    howBaseImg.addEventListener("load", updateHowOverlay);
+    window.addEventListener("resize", updateHowOverlay);
+    window.addEventListener("scroll", updateHowOverlay, { passive: true });
+    updateHowOverlay();
+
+    // -----------------------------
+    // Panel 3: Corner buttons -> popup modal (images + bottom-left links)
+    // -----------------------------
+    const photoModal = document.getElementById("photoModal");
+    const photoModalTitle = document.getElementById("photoModalTitle");
+    const photoModalBody = document.getElementById("photoModalBody");
+    const photoModalFooter = document.getElementById("photoModalFooter");
+    const photoModalImg = document.getElementById("photoModalImg");
+
+    // IMPORTANT: use transfer-friendly RELATIVE paths (no /Users/...)
+    // If your HTML is inside the CMS folder, assets live at CMS/assets/ => "assets/..."
+    const PHOTO_POPUP = {
+      bend: {
+        title: "Bending Particles",
+        body: `
+          <p><strong>The CMS magnet is the heart of the detector.</strong> It creates a very strong <strong>4-tesla</strong> magnetic field inside a huge superconducting coil.</p>
+
+          <p>When charged particles fly out from an LHC collision, the field <strong>bends their paths</strong>. That bending is useful because:</p>
+          <ul>
+            <li><strong>Charge sign:</strong> positive and negative particles curve in opposite directions.</li>
+            <li><strong>Momentum:</strong> the straighter the track, the higher the momentum (high-momentum particles bend less).</li>
+          </ul>
+
+          <p>CMS was designed to have an extremely strong field so even very energetic particles still bend enough to measure their momentum precisely, especially when combined with the tracker and muon system.</p>
+
+          <p>The magnet sits inside a massive <strong>iron return yoke</strong> that helps guide the magnetic field and also acts like a filter: most particles get absorbed, while muons can pass through to the outer detectors.</p>
+        `,
+
+        image: { src: "assets/gammagamma.png", alt: "Bending particles illustration" },
+        links: [
+          { label: "Learn more", href: "https://cms.cern/detector/bending-particles" },
+          { label: "Photo citation", href: "https://cms.cern/book/export/html/1617" }
+        ],
+        cite: "Learn more: cms.cern/detector/bending-particles • Photo: cms.cern/book/export/html/1617"
+      },
+
+      track: {
+        title: "Identifying Tracks",
+        body: `
+          <p><strong>To measure bending, CMS first needs the particle’s path.</strong> That’s the job of the <strong>silicon tracker</strong>, the innermost detector around the collision point.</p>
+
+          <p>As a charged particle crosses each layer, it leaves tiny signals called <strong>hits</strong>. CMS links many hits together to reconstruct a <strong>track</strong>.</p>
+
+          <ul>
+            <li><strong>Very precise:</strong> each position measurement is about <strong>10 μm</strong> (much thinner than a human hair).</li>
+            <li><strong>Built for harsh conditions:</strong> it’s lightweight to disturb particles as little as possible, and it’s made to survive intense radiation.</li>
+          </ul>
+
+          <p>The tracker uses two silicon technologies: <strong>pixels</strong> close to the beam (highest hit rate) and <strong>microstrips</strong> around them. The signals are quickly sent out (via optical links) to electronics in a safer area for processing.</p>
+
+          <p>With these tracks, CMS can also spot <strong>secondary tracks</strong> from short-lived particles (like b-hadron decays), which is crucial for many physics analyses.</p>
+        `,
+        image: { src: "assets/CMS_bg.jpg", alt: "Tracker / hits background" },
+        links: [
+          { label: "Learn more", href: "https://cms.cern/detector/identifying-tracks" }
+          // add photo citation link if you have one
+        ],
+        cite: "Learn more: cms.cern/detector/identifying-tracks"
+      },
+
+      energy: {
+        title: "Measuring Energy",
+        body: `
+          <p><strong>Energy tells us what happened at the collision point.</strong> CMS measures energy mainly using two detector layers called <strong>calorimeters</strong>.</p>
+
+          <ul>
+            <li><strong>ECAL (electromagnetic calorimeter):</strong> stops <strong>electrons and photons</strong> and measures their energy from the shower they create.</li>
+            <li><strong>HCAL (hadron calorimeter):</strong> sits outside ECAL and measures <strong>hadrons</strong>, which usually pass through ECAL and deposit energy deeper.</li>
+          </ul>
+
+          <p>By combining the tracker (direction + charge), the calorimeters (energy), and later the muon system, CMS can identify what particles were produced in each event and reconstruct the full collision “picture”.</p>
+        `,
+        image: { src: "assets/bg_img.jpg", alt: "Calorimeters background" },
+        links: [
+          { label: "Learn more", href: "https://cms.cern/detector/measuring-energy" }
+          // add photo citation link if you have one
+        ],
+        cite: "Learn more: cms.cern/detector/measuring-energy"
+      },
+
+      muon: {
+        title: "Detecting Muons",
+        body: `
+          <p><strong>Muons are a key CMS signal.</strong> They are like heavy electrons (about <strong>200×</strong> heavier) and they can travel through meters of material with little energy loss.</p>
+
+          <p>Because muons are <strong>not stopped by the calorimeters</strong>, CMS detects them using dedicated <strong>muon chambers</strong> placed in the outer part of the detector, inside and around the iron return yoke.</p>
+
+          <p>CMS measures a muon by fitting its curved path across multiple <strong>muon stations</strong>. For better precision, CMS combines this with the inner <strong>tracker</strong> measurement. The straighter the curve, the higher the momentum.</p>
+
+          <p>The muon system uses several chamber technologies and includes redundancy so it can both <strong>track muons</strong> and provide fast <strong>trigger</strong> decisions (keep or discard an event).</p>
+        `,
+
+        image: { src: "assets/MuStations.gif", alt: "Muon stations / muon system" },
+        links: [
+          { label: "Learn more", href: "https://cms.cern/detector/detecting-muons" }
+          // add photo citation link if you have one
+        ],
+        cite: "Learn more: cms.cern/detector/detecting-muons"
+      }
+    };
+
+
+    function openPhotoModal(key){
+      const item = PHOTO_POPUP[key];
+      if (!item) return;
+
+      photoModalTitle.textContent = item.title;
+      photoModalBody.innerHTML = item.body;
+
+      // image
+      if (item.image?.src) {
+        photoModalImg.src = item.image.src;
+        photoModalImg.alt = item.image.alt || item.title;
+        photoModalImg.style.display = "block";
+      } else {
+        photoModalImg.src = "";
+        photoModalImg.alt = "";
+        photoModalImg.style.display = "none";
+      }
+
+      // bottom-left links
+      photoModalFooter.innerHTML = "";
+      (item.links || []).forEach(l => {
+        const a = document.createElement("a");
+        a.className = "photoModalLink";
+        a.href = l.href || "#";
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.textContent = l.label;
+        photoModalFooter.appendChild(a);
+      });
+
+      photoModal.classList.add("is-open");
+      photoModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closePhotoModal(){
+      photoModal.classList.remove("is-open");
+      photoModal.setAttribute("aria-hidden", "true");
+    }
+
+    document.querySelectorAll(".photoCornerBtn").forEach(btn => {
+      btn.addEventListener("click", () => openPhotoModal(btn.dataset.key));
+    });
+
+    photoModal.addEventListener("click", (e) => {
+      const close = e.target && e.target.getAttribute("data-close");
+      if (close) closePhotoModal();
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && photoModal.classList.contains("is-open")) closePhotoModal();
+    });
+  </script>
+</body>
+</html>
 
