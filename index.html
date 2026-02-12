@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sara Chopra — Science Communication & Physics</title>
+  <title>Sara Chopra</title>
 
   <style>
     :root{
@@ -13,190 +13,812 @@
       --muted:#b7bfd6;
       --accent:#2aa8ff;
       --radius:18px;
+      --ease:cubic-bezier(.2,.8,.2,1);
     }
 
     *{box-sizing:border-box;}
+    html{ scroll-behavior:smooth; }
+
     body{
       margin:0;
-      background:var(--bg);
+      background:
+        radial-gradient(900px 520px at 18% 10%, rgba(42,168,255,.10), transparent 60%),
+        radial-gradient(820px 520px at 86% 22%, rgba(53,51,205,.08), transparent 62%),
+        var(--bg);
       color:var(--text);
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       line-height:1.55;
+      overflow-x:hidden;
     }
 
     a{color:inherit; text-decoration:none;}
 
     .wrap{
-      max-width:1100px;
+      max-width:1240px;
       margin:auto;
       padding:clamp(20px,5vw,64px);
     }
 
-    header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:80px;
-    }
+    header{ display:none; }
 
-    .logo{
-      font-weight:800;
-      letter-spacing:.03em;
-    }
-
-    nav a{
-      margin-left:24px;
-      color:var(--muted);
-    }
-
-    nav a:hover{color:var(--text);}
-
+    /* HERO */
     .hero{
-      max-width:720px;
+      max-width:860px;
+      margin: 0 auto;
+      text-align:center;
     }
 
     .hero h1{
-      font-size:clamp(36px,5vw,64px);
-      line-height:1.05;
-      margin:0 0 20px;
+      font-size: clamp(44px, 5.8vw, 78px);
+      line-height: 1.08;
+      margin: 0 0 18px;
+      letter-spacing: .02em;
+      font-weight: 500; /* not bold */
+      text-align: center;
     }
 
     .hero p{
       color:var(--muted);
       font-size:18px;
+      margin: 0 auto;
+      max-width: 78ch;
+      text-align: center;
     }
 
+    /* CTA BUTTONS */
     .cta{
       margin-top:32px;
       display:flex;
-      gap:16px;
+      gap:14px;
       flex-wrap:wrap;
+      align-items:center;
+      justify-content:center;
     }
 
+    /* HERO CTA BUTTONS: bigger */
     .btn{
-      padding:14px 20px;
-      border-radius:12px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    padding: 18px 24px;     /* was 14px 18px */
+    min-height: 52px;       /* makes them feel chunkier */
+    border-radius: 14px;    /* slightly larger */
+    font-weight: 800;
+    font-size: 16px;        /* was 14px */
+
+    border: 1px solid rgba(255,255,255,.12);
+    transition: transform .2s var(--ease), border-color .2s var(--ease),
+                background .2s var(--ease), box-shadow .2s var(--ease), color .2s var(--ease);
+    cursor:pointer;
+    user-select:none;
+    }
+
+    .btn.primary{
       background:var(--accent);
       color:#000;
-      font-weight:700;
+      border-color: rgba(42,168,255,.35);
+    }
+    .btn.primary:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 18px 60px rgba(0,0,0,.45);
     }
 
     .btn.secondary{
       background:transparent;
-      border:1px solid rgba(255,255,255,.2);
+      border:1px solid rgba(255,255,255,.22);
       color:var(--text);
     }
-
-    section{
-      margin-top:120px;
+    .btn.secondary:hover{
+      transform: translateY(-2px);
+      border-color: rgba(42,168,255,.75);
+      background: rgba(42,168,255,.12);
+      box-shadow: 0 18px 60px rgba(0,0,0,.45);
     }
 
+    /* more distance + a bit more scroll feel */
+    section{
+      margin-top: 240px;
+      scroll-margin-top: 48px;
+    }
+
+    /* tighten gap between HERO (top) and Featured Work */
+    #featured-work{
+    margin-top: 120px;   /* try 120px, adjust to taste */
+    }
+
+
     h2{
-      margin-bottom:28px;
+      margin:0 0 28px;
       font-size:28px;
+      letter-spacing:.01em;
     }
 
     .grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
       gap:24px;
     }
 
     .card{
       background:var(--card);
       border-radius:var(--radius);
-      padding:24px;
-      transition:transform .2s ease, box-shadow .2s ease;
-      border:1px solid rgba(255,255,255,.06);
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.07);
+      transition: transform .2s var(--ease), box-shadow .2s var(--ease), border-color .2s var(--ease);
+      box-shadow: 0 10px 40px rgba(0,0,0,.25);
+      position: relative;
     }
 
     .card:hover{
       transform:translateY(-4px);
-      box-shadow:0 20px 60px rgba(0,0,0,.4);
+      box-shadow:0 20px 70px rgba(0,0,0,.45);
+      border-color: rgba(42,168,255,.35);
     }
+
+    /* THUMB: full image centered + soft bottom blur fade */
+    .thumb{
+    height: 240px;                 /* slightly taller looks better */
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    background: rgba(0,0,0,.18);
+    }
+
+    /* Center the image and keep it full */
+    .thumb img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit: cover;
+    object-position: center;       /* <-- ensures it's centered */
+    opacity: .90;                  /* make it look like a real image */
+    filter: saturate(1.05) contrast(1.05);
+    transform: scale(1.08);
+    }
+
+    /* Soft vignette + no harsh line */
+    .thumb::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+        radial-gradient(700px 240px at 20% 10%, rgba(42,168,255,.16), transparent 58%),
+        radial-gradient(700px 300px at 100% 0%, rgba(53,51,205,.12), transparent 58%),
+        linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.08));
+    pointer-events:none;
+    }
+
+    /* Bottom blur overlay that fades upward */
+    .thumb .blurFade{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    height: 62%;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    /* Fade blur smoothly upward */
+    -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0));
+    mask-image: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0));
+
+    background: rgba(10,12,16,0.35); /* subtle tint, keeps your palette */
+    pointer-events:none;
+    }
+
+    /* Text sits on top of the blur */
+    .thumb .thumbText{
+    position:absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 14px;
+    z-index: 2;
+
+    display:flex;
+    flex-direction:column;
+    gap: 6px;
+    }
+
+    .thumb .thumbTitle{
+    margin:0;
+    font-weight: 900;
+    font-size: 15px;
+    color: rgba(255,255,255,0.92);
+    }
+
+    .thumb .thumbSub{
+    margin:0;
+    color: rgba(255,255,255,0.78);
+    font-size: 12.5px;
+    line-height: 1.35;
+    max-width: 44ch;
+    }
+
+
+    .cardBody{ padding:22px 22px 24px; }
 
     .card h3{
       margin:0 0 8px;
+      font-size: 18px;
+      letter-spacing:.01em;
     }
 
     .card p{
+      margin:0;
       color:var(--muted);
       font-size:15px;
+      line-height:1.55;
+    }
+
+    .docRow{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top: 14px;
+    }
+
+    /* DOC BUTTONS (Open/Download): bigger */
+    .docBtn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    padding: 18px 22px;     /* was 12px 14px */
+    min-height: 46px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 14px;        /* was 13px */
+
+    border:1px solid rgba(255,255,255,.20);
+    background: rgba(0,0,0,.18);
+    color: rgba(255,255,255,.92);
+    transition: transform .2s var(--ease), border-color .2s var(--ease),
+                background .2s var(--ease), box-shadow .2s var(--ease);
+    }
+    .docBtn:hover{
+      transform: translateY(-2px);
+      border-color: rgba(42,168,255,.75);
+      background: rgba(42,168,255,.12);
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
     }
 
     footer{
-      margin-top:140px;
+      margin-top:160px;
       padding:40px 0;
       color:var(--muted);
       font-size:14px;
       border-top:1px solid rgba(255,255,255,.08);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 16px;
+      flex-wrap:wrap;
+
+      /* keep consistent with focus blur system */
+      transition: opacity .28s var(--ease), filter .28s var(--ease), transform .28s var(--ease);
+    }
+
+    .footerLink{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.20);
+      transition: transform .2s var(--ease), border-color .2s var(--ease), background .2s var(--ease);
+      font-weight: 700;
+      color: rgba(255,255,255,.9);
+    }
+
+    .footerLink:hover{
+      transform: translateY(-2px);
+      border-color: rgba(42,168,255,.70);
+      background: rgba(42,168,255,.10);
+    }
+
+    footer.is-dim{
+      opacity: .35;
+      filter: blur(3px);
+      transform: scale(0.995);
+    }
+    footer.is-focus{
+      opacity: 1;
+      filter: blur(0);
+      transform: scale(1);
+    }
+
+    /* MODAL */
+    .modal{
+      position: fixed;
+      inset: 0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: clamp(12px, 3vw, 28px);
+      z-index: 999;
+    }
+    .modal.is-open{ display:flex; }
+
+    .modalBackdrop{
+      position:absolute;
+      inset:0;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(7px);
+    }
+
+    .modalCard{
+      position: relative;
+      width: min(900px, 92vw);
+      max-height: min(82vh, 900px);
+      overflow:auto;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background:
+        radial-gradient(900px 450px at 20% -10%, rgba(42,168,255,0.14), transparent 55%),
+        radial-gradient(700px 420px at 100% 20%, rgba(53,51,205,0.10), transparent 55%),
+        rgba(10,12,16,0.92);
+      box-shadow: 0 28px 110px rgba(0,0,0,0.70);
+      padding: clamp(20px, 3vw, 34px);
+      transform: translateY(10px) scale(0.995);
+      opacity: 0;
+      animation: popIn 260ms var(--ease) forwards;
+    }
+
+    @keyframes popIn{
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    .modalTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+
+    .modalTitle{
+      margin:0;
+      font-size: 20px;
+      letter-spacing:.01em;
+      font-weight: 900;
+    }
+
+    .modalClose{
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(12,14,18,0.55);
+      color: rgba(255,255,255,0.92);
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      font-weight: 900;
+      transition: transform 200ms var(--ease), border-color 200ms var(--ease), background 200ms var(--ease);
+    }
+    .modalClose:hover{
+      transform: translateY(-2px);
+      border-color: rgba(42,168,255,0.60);
+      background: rgba(14,18,24,0.80);
+    }
+
+    /* About modal text: justified + more padding/spacing */
+    .modalBody{
+    color: rgba(255,255,255,0.86);
+    font-size: 16px;
+    line-height: 1.8;          /* more airy */
+    max-width: 72ch;
+
+    padding: 6px 2px;          /* extra space inside the body */
+    text-align: justify;       /* justified */
+    text-justify: inter-word;
+    }
+
+    .modalBody p{
+    margin: 0 0 16px;          /* more space between paragraphs */
+    }
+
+
+    /* FOCUS / BLUR EFFECT FOR OTHER SECTIONS */
+    .focusSection{
+      transition: filter .28s var(--ease), opacity .28s var(--ease), transform .28s var(--ease);
+    }
+    .focusSection.is-dim{
+      filter: blur(3px);
+      opacity: .55;
+      transform: scale(0.995);
+    }
+    .focusSection.is-focus{
+      filter: blur(0px);
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* LEFT NAV: VERTICAL LINE + DOTS (equal spacing) */
+    .sideNav{
+    position: fixed;
+    left: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    width: 190px;
+    }
+
+    @media (max-width: 920px){
+    .sideNav{ display:none; }
+    }
+
+    .sideNav .rail{
+    position: relative;
+    padding-left: 34px;                 /* space for line + dots */
+    display:flex;
+    flex-direction:column;
+    gap: 0;                              /* IMPORTANT: no gap */
+    }
+
+    .sideNav .rail{
+    position: relative;
+    padding-left: 34px;
+    display:flex;
+    flex-direction:column;
+    gap: 0;
+    }
+
+    .sideNav .rail::before{
+    content:"";
+    position:absolute;
+
+    /* line x position */
+    left: 20px;
+
+    /* EXACTLY align to dot centers */
+    top: calc(58px / 2);                /* center of first item */
+    height: calc(100% - 58px);          /* from first center to last center */
+
+    width: 2px;
+    background: rgba(42,168,255,.55);
+    border-radius: 999px;
+    }
+
+
+    /* each item has a FIXED height so dots are equally spaced */
+    .sideNav a{
+    position: relative;
+    height: 58px;                        /* adjust (52–64) to taste */
+    display:flex;
+    align-items:center;
+    color: rgba(255,255,255,.72);
+    font-size: 12.5px;
+    font-weight: 800;
+    letter-spacing: .01em;
+    line-height: 1.2;
+    transition: color .2s var(--ease), transform .2s var(--ease);
+    }
+
+    .sideNav a::before{
+    content:"";
+    position:absolute;
+    left: -20px;                         /* aligns dot on the rail */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(11,13,18,1);
+    border: 2px solid rgba(42,168,255,.70);
+    }
+
+    /* active state */
+    .sideNav a.is-active{
+    color: var(--accent);
+    }
+    .sideNav a.is-active::before{
+    background: var(--accent);
+    border-color: rgba(42,168,255,1);
+    }
+
+    .sideNav a:hover{
+    color: rgba(255,255,255,.92);
+    transform: translateY(-1px);
+    }
+
+
+    .sideNav a.is-active{
+      color: var(--accent);
+    }
+
+    .sideNav a.is-active::before{
+      background: var(--accent);
+      border-color: rgba(42,168,255,1);
+      transform: scale(1.02);
+    }
+
+    /* small helper so text wraps nicely like screenshot */
+    .sideNav .label{
+      display:inline-block;
+      max-width: 130px;
+      white-space: normal;
     }
   </style>
 </head>
 
 <body>
+
+  <!-- Left navigation (vertical line + dots) -->
+  <nav class="sideNav" aria-label="Section navigation">
+    <div class="rail">
+      <a href="#featured-work" id="navFeatured"><span class="label">Featured Work</span></a>
+      <a href="#application-documents" id="navApp"><span class="label">Application<br>Documents</span></a>
+      <a href="#masters-thesis" id="navThesis"><span class="label">Thesis Documents</span></a>
+    </div>
+  </nav>
+
   <div class="wrap">
 
-    <header>
-      <div class="logo">Sara Chopra</div>
-      <nav>
-        <a href="portfolio/">Portfolio</a>
-        <a href="application/">Application</a>
-      </nav>
-    </header>
+    <!-- HERO -->
+    <section class="hero focusSection is-focus" id="top">
+      <h1>Sara Chopra</h1>
 
-    <section class="hero">
-      <h1>
-        Physics-trained<br>
-        Science Communicator
-      </h1>
       <p>
-        I translate complex research in particle physics, detectors, and
-        quantum science into clear, visual, and engaging formats — from
-        interactive web explainers to public-facing content.
+        “M.Sc. Physics (UHH) graduate, focused on turning complex scientific research into clear, engaging communication for specialist and non-specialist audiences alike.”
       </p>
 
       <div class="cta">
-        <a class="btn" href="portfolio/">View Portfolio</a>
-        <a class="btn secondary" href="application/">Applications & CV</a>
+        <button class="btn secondary" type="button" id="aboutBtn">About</button>
+        <a class="btn primary" href="portfolio/">View Portfolio</a>
+        <a class="btn secondary" href="#application-documents">Application Documents</a>
+        <a class="btn secondary" href="#masters-thesis">Master’s Thesis</a>
       </div>
     </section>
 
-    <section>
+    <section class="focusSection" id="featured-work">
       <h2>Featured Work</h2>
-      <div class="grid">
 
+      <div class="grid">
         <a class="card" href="portfolio/projects/cms-web-infographic/">
-          <h3>CMS Web Infographic</h3>
-          <p>
-            Interactive explainer on how the CMS detector works at CERN,
-            combining physics accuracy with scrollytelling.
-          </p>
+            <div class="thumb">
+                <img src="assets/images/cms-thumb.jpg" alt="CMS Web Infographic thumbnail" >
+                <div class="blurFade"></div>
+
+                <div class="thumbText">
+                <p class="thumbTitle">CMS Web Infographic</p>
+                <p class="thumbSub">Interactive explainer on how the CMS detector works at CERN with scrollytelling.</p>
+                </div>
+            </div>
+        </a>
+
+
+        <a class="card" href="portfolio/projects/cui-web-infographic/">
+            <div class="thumb">
+                <img src="assets/images/cui-thumb.jpg" alt="Videos and posts thumbnail">
+                <div class="blurFade"></div>
+
+                <div class="thumbText">
+                    <p class="thumbTitle">Videos &amp; Posts</p>
+                    <p class="thumbSub">Short-form science videos, outreach posts, and visual explainers for research communication.</p>
+                </div>
+            </div>
+        </a>
+
+        <a class="card" href="portfolio/projects/teaching/">
+            <div class="thumb">
+                <img src="assets/images/teaching-thumb.jpg" alt="Teaching material thumbnail">
+                <div class="blurFade"></div>
+
+                <div class="thumbText">
+                    <p class="thumbTitle">Teaching Material</p>
+                    <p class="thumbSub">Lecture slides, worksheets, and interactive explanations designed for different audience levels.</p>
+                </div>
+            </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="focusSection" id="application-documents">
+      <h2>Application Documents</h2>
+
+      <div class="grid">
+        <div class="card">
+          <div class="cardBody">
+            <h3>CV</h3>
+            <p>PDF version of my curriculum vitae.</p>
+            <div class="docRow">
+              <a class="docBtn" href="assets/docs/cv.pdf" target="_blank" rel="noopener">Open CV (PDF)</a>
+              <a class="docBtn" href="assets/docs/cv.pdf" download>Download</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardBody">
+            <h3>Transcript</h3>
+            <p>Academic transcript and degree documentation (PDF).</p>
+            <div class="docRow">
+              <a class="docBtn" href="assets/docs/transcript.pdf" target="_blank" rel="noopener">Open Transcript (PDF)</a>
+              <a class="docBtn" href="assets/docs/transcript.pdf" download>Download</a>
+            </div>
+          </div>
+        </div>
+
+        <a class="card" href="application/">
+          <div class="cardBody">
+            <h3>Full application set</h3>
+            <p>Cover letters, supporting materials, and role-specific documents (organised by application).</p>
+            <div class="docRow">
+              <span class="docBtn" style="pointer-events:none; opacity:.85;">Open section</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="focusSection" id="masters-thesis">
+      <h2>Master’s Thesis</h2>
+
+      <div class="grid">
+        <a class="card" href="portfolio/masters-thesis/">
+          <div class="cardBody">
+            <h3>Thesis Overview</h3>
+            <p>Summary, thesis PDF, and presentation materials. (Content will be added next.)</p>
+          </div>
         </a>
 
         <div class="card">
-          <h3>CUI Research Outreach</h3>
-          <p>
-            Visual and written communication for interdisciplinary research
-            at the Cluster of Excellence for Advanced Imaging of Matter.
-          </p>
+          <div class="cardBody">
+            <h3>Thesis Summary</h3>
+            <p>A short, reader-friendly overview of the motivation, methods, and key results will be included here.</p>
+          </div>
         </div>
 
         <div class="card">
-          <h3>Talks & Teaching</h3>
-          <p>
-            Interactive lectures and workshops for school students and
-            non-specialist audiences.
-          </p>
+          <div class="cardBody">
+            <h3>Slides</h3>
+            <p>The final defense slides (PDF) will be linked here once ready.</p>
+          </div>
         </div>
-
       </div>
     </section>
 
-    <footer>
-      © 2026 Sara Chopra · Hamburg · Science Communication & Physics
+    <footer class="focusSection" id="footer">
+      <div>© 2026 Sara Chopra · Hamburg · Science Communication &amp; Physics</div>
+      <a class="footerLink" href="https://www.linkedin.com/in/your-link/" target="_blank" rel="noopener">
+        LinkedIn
+      </a>
     </footer>
 
   </div>
+
+  <!-- ABOUT MODAL -->
+  <div class="modal" id="aboutModal" aria-hidden="true">
+    <div class="modalBackdrop" data-close="1"></div>
+
+    <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+      <div class="modalTop">
+        <h2 class="modalTitle" id="aboutTitle">About</h2>
+        <button class="modalClose" type="button" data-close="1">Close</button>
+      </div>
+
+      <div class="modalBody">
+        <p>
+          M.Sc. Physics graduate from Universität Hamburg, specialised in Accelerator and Particle Physics. My master’s thesis explored sum rules in extended Higgs models and their phenomenological applications. I currently work as a student helper in PR and communications at the Cluster of Excellence “Advanced Imaging of Matter” (CUI), supporting research outreach through visual design, written content, and digital formats. 
+        <p>
+
+        </p> 
+            I aim to combine scientific rigour with strong design and technical skills to make complex topics clear, accurate, and accessible for specialist and non-specialist audiences. This website presents selected work, including interactive web explainers, graphics, teaching materials, and thesis-related outputs.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // About modal
+    const aboutBtn = document.getElementById("aboutBtn");
+    const aboutModal = document.getElementById("aboutModal");
+    const footer = document.getElementById("footer");
+
+    function openAbout(){
+      aboutModal.classList.add("is-open");
+      aboutModal.setAttribute("aria-hidden", "false");
+    }
+    function closeAbout(){
+      aboutModal.classList.remove("is-open");
+      aboutModal.setAttribute("aria-hidden", "true");
+    }
+    aboutBtn.addEventListener("click", openAbout);
+    aboutModal.addEventListener("click", (e) => {
+      if (e.target && e.target.getAttribute("data-close")) closeAbout();
+    });
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && aboutModal.classList.contains("is-open")) closeAbout();
+    });
+
+    // Focus blur + left nav highlighting (ONLY real sections)
+    const focusTargets = ["top", "featured-work", "application-documents", "masters-thesis"]
+      .map(id => document.getElementById(id))
+      .filter(Boolean);
+
+    const allFocusSections = Array.from(document.querySelectorAll(".focusSection"));
+
+    const navFeatured = document.getElementById("navFeatured");
+    const navApp = document.getElementById("navApp");
+    const navThesis = document.getElementById("navThesis");
+
+    function setFocus(activeId){
+    // combine TOP + FEATURED as one focus group
+    const combinedId = (activeId === "top") ? "featured-work" : activeId;
+
+    allFocusSections.forEach(sec => {
+        const isActive = (sec.id === combinedId) || (sec.id === "top" && combinedId === "featured-work");
+        sec.classList.toggle("is-focus", isActive);
+        sec.classList.toggle("is-dim", !isActive);
+    });
+
+    // Footer should feel "together" with Master’s Thesis
+    if (footer){
+        const footerActive = (combinedId === "masters-thesis");
+        footer.classList.toggle("is-focus", footerActive);
+        footer.classList.toggle("is-dim", !footerActive);
+    }
+    }
+
+    function setNav(activeId){
+    const combinedId = (activeId === "top") ? "featured-work" : activeId;
+
+    [navFeatured, navApp, navThesis].forEach(a => a && a.classList.remove("is-active"));
+
+    if (combinedId === "featured-work" && navFeatured) navFeatured.classList.add("is-active");
+    if (combinedId === "application-documents" && navApp) navApp.classList.add("is-active");
+    if (combinedId === "masters-thesis" && navThesis) navThesis.classList.add("is-active");
+    }
+
+    // Prevent "blur stuck" after clicking nav
+    let lockObserver = false;
+    let lockTimer = null;
+
+    function lockForNavJump(targetId){
+      lockObserver = true;
+      setFocus(targetId);
+      setNav(targetId);
+      clearTimeout(lockTimer);
+      lockTimer = setTimeout(() => { lockObserver = false; }, 550);
+    }
+
+    document.querySelectorAll(".sideNav a").forEach(a => {
+      a.addEventListener("click", () => {
+        const id = (a.getAttribute("href") || "").replace("#", "");
+        if (id) lockForNavJump(id);
+      });
+    });
+
+    window.addEventListener("hashchange", () => {
+      const id = (location.hash || "#top").replace("#", "");
+      lockForNavJump(id);
+    });
+
+    // default on load
+    setFocus("top");
+    setNav("featured-work");
+
+    const obs = new IntersectionObserver((entries) => {
+      if (lockObserver) return;
+
+      const visible = entries
+        .filter(e => e.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+      if (!visible) return;
+
+      const id = visible.target.id;
+      setFocus(id);
+      setNav(id);
+
+    }, {
+      root: null,
+      rootMargin: "-40% 0px -45% 0px",
+      threshold: [0.01, 0.1, 0.2, 0.35, 0.5]
+    });
+
+    focusTargets.forEach(s => obs.observe(s));
+  </script>
 </body>
 </html>
