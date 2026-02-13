@@ -75,12 +75,55 @@
       justify-content:center;
     }
 
+    /* === PORTFOLIO MODAL: reliable internal scroll + centered content === */
+
+    /* IMPORTANT: only ONE modalGrid definition (one centered column) */
+    #portfolioModal .modalGrid{
+      display: grid;
+      grid-template-columns: minmax(320px, 620px); /* one centered column */
+      justify-content: center;
+      gap: 18px;
+    }
+
+    /* Make the card NOT be the scroller */
+    #portfolioModal .modalCard{
+      overflow: hidden;          /* scroll happens in .modalScroll */
+      max-height: min(82vh, 900px);
+      padding: 0;                /* padding moved to inner parts */
+    }
+
+    /* Keep padding on header + scroll area */
+    #portfolioModal .modalTop{
+      padding: clamp(18px, 2.6vw, 28px);
+      padding-bottom: 10px;
+    }
+
+    /* This is the actual scroll container */
+    #portfolioModal .modalScroll{
+      padding: 0 clamp(18px, 2.6vw, 28px) clamp(18px, 2.6vw, 28px);
+      max-height: calc(min(82vh, 900px) - 92px);
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* slightly smaller close button */
+    #portfolioModal .modalClose{
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-size: 13px;
+    }
+
+    /* Make sure video stays behind everything */
+    #portfolioModal .modalVideoBg{ z-index: 0; }
+    #portfolioModal .modalTop,
+    #portfolioModal .modalScroll{ position: relative; z-index: 1; }
+
     /* Portfolio modal background video (ONLY inside modal) */
     .modalCard.hasVideoBg{
       position: relative;
       overflow: hidden;
     }
-    
+
     /* video layer behind modal content */
     .modalVideoBg{
       position: absolute;
@@ -89,7 +132,7 @@
       pointer-events: none;
       opacity: 0.50; /* 50% transparency */
     }
-    
+
     .modalVideoBg video{
       width: 100%;
       height: 100%;
@@ -97,7 +140,7 @@
       display: block;
       filter: saturate(1.05) contrast(1.05);
     }
-    
+
     /* dark overlay so text stays readable */
     .modalVideoBg::after{
       content:"";
@@ -108,7 +151,7 @@
         radial-gradient(700px 420px at 100% 20%, rgba(53,51,205,0.14), transparent 55%),
         rgba(10,12,16,0.72);
     }
-    
+
     /* ensure modal content renders ABOVE the video */
     .modalCard.hasVideoBg .modalTop,
     .modalCard.hasVideoBg .modalBody{
@@ -116,24 +159,85 @@
       z-index: 1;
     }
 
+    /* Let background video show through the cards in the modal */
+    #portfolioModal .card{
+      background: rgba(18,22,34,.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    /* Smaller modal card internals */
+    #portfolioModal .thumb{ height:160px; }
+    #portfolioModal .cardBody{ padding:14px 14px 16px; }
+    #portfolioModal .card h3{ font-size:16px; margin-bottom:6px; }
+    #portfolioModal .card p{ font-size:13.5px; line-height:1.45; }
+    #portfolioModal .docRow{ margin-top:10px; gap:10px; }
+
+    /* Quick Links layout (2 columns) */
+    #portfolioModal .linksGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 12px;
+    }
+    @media (max-width: 720px){
+      #portfolioModal .linksGrid{ grid-template-columns: 1fr; }
+    }
+
+    /* Quick Links as button rows */
+    #portfolioModal .linkList{
+      list-style:none;
+      padding:0;
+      margin:0;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    #portfolioModal .linkBtn{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.16);
+      color: rgba(255,255,255,.92);
+
+      font-weight: 800;
+      font-size: 13px;
+      line-height: 1.25;
+
+      transition: transform .2s var(--ease), border-color .2s var(--ease),
+                  background .2s var(--ease), box-shadow .2s var(--ease);
+    }
+
+    #portfolioModal .linkBtn:hover{
+      transform: translateY(-2px);
+      border-color: rgba(42,168,255,.65);
+      background: rgba(42,168,255,.10);
+      box-shadow: 0 18px 60px rgba(0,0,0,.25);
+    }
 
     /* HERO CTA BUTTONS: bigger */
     .btn{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
 
-    padding: 18px 24px;     /* was 14px 18px */
-    min-height: 52px;       /* makes them feel chunkier */
-    border-radius: 14px;    /* slightly larger */
-    font-weight: 800;
-    font-size: 16px;        /* was 14px */
+      padding: 18px 24px;
+      min-height: 52px;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 16px;
 
-    border: 1px solid rgba(255,255,255,.12);
-    transition: transform .2s var(--ease), border-color .2s var(--ease),
-                background .2s var(--ease), box-shadow .2s var(--ease), color .2s var(--ease);
-    cursor:pointer;
-    user-select:none;
+      border: 1px solid rgba(255,255,255,.12);
+      transition: transform .2s var(--ease), border-color .2s var(--ease),
+                  background .2s var(--ease), box-shadow .2s var(--ease), color .2s var(--ease);
+      cursor:pointer;
+      user-select:none;
     }
 
     .btn.primary{
@@ -166,9 +270,8 @@
 
     /* tighten gap between HERO (top) and Featured Work */
     #featured-work{
-    margin-top: 120px;   /* try 120px, adjust to taste */
+      margin-top: 120px;
     }
-
 
     h2{
       margin:0 0 28px;
@@ -200,84 +303,78 @@
 
     /* THUMB: full image centered + soft bottom blur fade */
     .thumb{
-    height: 240px;                 /* slightly taller looks better */
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-    background: rgba(0,0,0,.18);
+      height: 240px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      background: rgba(0,0,0,.18);
     }
 
-    /* Center the image and keep it full */
     .thumb img{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit: cover;
-    object-position: center;       /* <-- ensures it's centered */
-    opacity: .90;                  /* make it look like a real image */
-    filter: saturate(1.05) contrast(1.05);
-    transform: scale(1.08);
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      object-position: center;
+      opacity: .90;
+      filter: saturate(1.05) contrast(1.05);
+      transform: scale(1.08);
     }
 
-    /* Soft vignette + no harsh line */
     .thumb::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:
-        radial-gradient(700px 240px at 20% 10%, rgba(42,168,255,.16), transparent 58%),
-        radial-gradient(700px 300px at 100% 0%, rgba(53,51,205,.12), transparent 58%),
-        linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.08));
-    pointer-events:none;
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+          radial-gradient(700px 240px at 20% 10%, rgba(42,168,255,.16), transparent 58%),
+          radial-gradient(700px 300px at 100% 0%, rgba(53,51,205,.12), transparent 58%),
+          linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.08));
+      pointer-events:none;
     }
 
-    /* Bottom blur overlay that fades upward */
     .thumb .blurFade{
-    position:absolute;
-    left:0;
-    right:0;
-    bottom:0;
-    height: 62%;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:0;
+      height: 62%;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
 
-    /* Fade blur smoothly upward */
-    -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0));
-    mask-image: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0));
+      -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0));
+      mask-image: linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0));
 
-    background: rgba(10,12,16,0.35); /* subtle tint, keeps your palette */
-    pointer-events:none;
+      background: rgba(10,12,16,0.35);
+      pointer-events:none;
     }
 
-    /* Text sits on top of the blur */
     .thumb .thumbText{
-    position:absolute;
-    left: 16px;
-    right: 16px;
-    bottom: 14px;
-    z-index: 2;
+      position:absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 14px;
+      z-index: 2;
 
-    display:flex;
-    flex-direction:column;
-    gap: 6px;
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
     }
 
     .thumb .thumbTitle{
-    margin:0;
-    font-weight: 900;
-    font-size: 15px;
-    color: rgba(255,255,255,0.92);
+      margin:0;
+      font-weight: 900;
+      font-size: 15px;
+      color: rgba(255,255,255,0.92);
     }
 
     .thumb .thumbSub{
-    margin:0;
-    color: rgba(255,255,255,0.78);
-    font-size: 12.5px;
-    line-height: 1.35;
-    max-width: 44ch;
+      margin:0;
+      color: rgba(255,255,255,0.78);
+      font-size: 12.5px;
+      line-height: 1.35;
+      max-width: 44ch;
     }
-
 
     .cardBody{ padding:22px 22px 24px; }
 
@@ -301,29 +398,36 @@
       margin-top: 14px;
     }
 
-    /* DOC BUTTONS (Open/Download): bigger */
     .docBtn{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
 
-    padding: 18px 22px;     /* was 12px 14px */
-    min-height: 46px;
-    border-radius: 12px;
-    font-weight: 800;
-    font-size: 14px;        /* was 13px */
+      padding: 18px 22px;
+      min-height: 46px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 14px;
 
-    border:1px solid rgba(255,255,255,.20);
-    background: rgba(0,0,0,.18);
-    color: rgba(255,255,255,.92);
-    transition: transform .2s var(--ease), border-color .2s var(--ease),
-                background .2s var(--ease), box-shadow .2s var(--ease);
+      border:1px solid rgba(255,255,255,.20);
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.92);
+      transition: transform .2s var(--ease), border-color .2s var(--ease),
+                  background .2s var(--ease), box-shadow .2s var(--ease);
     }
     .docBtn:hover{
       transform: translateY(-2px);
       border-color: rgba(42,168,255,.75);
       background: rgba(42,168,255,.12);
       box-shadow: 0 18px 60px rgba(0,0,0,.35);
+    }
+
+    /* Thesis cards: action row layout (added) */
+    .cardActions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:14px;
     }
 
     footer{
@@ -338,7 +442,6 @@
       gap: 16px;
       flex-wrap:wrap;
 
-      /* keep consistent with focus blur system */
       transition: opacity .28s var(--ease), filter .28s var(--ease), transform .28s var(--ease);
     }
 
@@ -446,20 +549,19 @@
 
     /* About modal text: justified + more padding/spacing */
     .modalBody{
-    color: rgba(255,255,255,0.86);
-    font-size: 16px;
-    line-height: 1.8;          /* more airy */
-    max-width: 72ch;
+      color: rgba(255,255,255,0.86);
+      font-size: 16px;
+      line-height: 1.8;
+      max-width: 72ch;
 
-    padding: 6px 2px;          /* extra space inside the body */
-    text-align: justify;       /* justified */
-    text-justify: inter-word;
+      padding: 6px 2px;
+      text-align: justify;
+      text-justify: inter-word;
     }
 
     .modalBody p{
-    margin: 0 0 16px;          /* more space between paragraphs */
+      margin: 0 0 16px;
     }
-
 
     /* FOCUS / BLUR EFFECT FOR OTHER SECTIONS */
     .focusSection{
@@ -478,104 +580,77 @@
 
     /* LEFT NAV: VERTICAL LINE + DOTS (equal spacing) */
     .sideNav{
-    position: fixed;
-    left: 32px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 50;
-    width: 190px;
+      position: fixed;
+      left: 32px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 50;
+      width: 190px;
     }
 
     @media (max-width: 920px){
-    .sideNav{ display:none; }
+      .sideNav{ display:none; }
     }
 
     .sideNav .rail{
-    position: relative;
-    padding-left: 34px;                 /* space for line + dots */
-    display:flex;
-    flex-direction:column;
-    gap: 0;                              /* IMPORTANT: no gap */
-    }
-
-    .sideNav .rail{
-    position: relative;
-    padding-left: 34px;
-    display:flex;
-    flex-direction:column;
-    gap: 0;
+      position: relative;
+      padding-left: 34px;
+      display:flex;
+      flex-direction:column;
+      gap: 0;
     }
 
     .sideNav .rail::before{
-    content:"";
-    position:absolute;
-
-    /* line x position */
-    left: 20px;
-
-    /* EXACTLY align to dot centers */
-    top: calc(58px / 2);                /* center of first item */
-    height: calc(100% - 58px);          /* from first center to last center */
-
-    width: 2px;
-    background: rgba(42,168,255,.55);
-    border-radius: 999px;
+      content:"";
+      position:absolute;
+      left: 20px;
+      top: calc(58px / 2);
+      height: calc(100% - 58px);
+      width: 2px;
+      background: rgba(42,168,255,.55);
+      border-radius: 999px;
     }
 
-
-    /* each item has a FIXED height so dots are equally spaced */
     .sideNav a{
-    position: relative;
-    height: 58px;                        /* adjust (52–64) to taste */
-    display:flex;
-    align-items:center;
-    color: rgba(255,255,255,.72);
-    font-size: 12.5px;
-    font-weight: 800;
-    letter-spacing: .01em;
-    line-height: 1.2;
-    transition: color .2s var(--ease), transform .2s var(--ease);
+      position: relative;
+      height: 58px;
+      display:flex;
+      align-items:center;
+      color: rgba(255,255,255,.72);
+      font-size: 12.5px;
+      font-weight: 800;
+      letter-spacing: .01em;
+      line-height: 1.2;
+      transition: color .2s var(--ease), transform .2s var(--ease);
     }
 
     .sideNav a::before{
-    content:"";
-    position:absolute;
-    left: -20px;                         /* aligns dot on the rail */
-    top: 50%;
-    transform: translateY(-50%);
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: rgba(11,13,18,1);
-    border: 2px solid rgba(42,168,255,.70);
+      content:"";
+      position:absolute;
+      left: -20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(11,13,18,1);
+      border: 2px solid rgba(42,168,255,.70);
     }
-
-    /* active state */
-    .sideNav a.is-active{
-    color: var(--accent);
-    }
-    .sideNav a.is-active::before{
-    background: var(--accent);
-    border-color: rgba(42,168,255,1);
-    }
-
-    .sideNav a:hover{
-    color: rgba(255,255,255,.92);
-    transform: translateY(-1px);
-    }
-
 
     .sideNav a.is-active{
       color: var(--accent);
     }
-
     .sideNav a.is-active::before{
       background: var(--accent);
       border-color: rgba(42,168,255,1);
       transform: scale(1.02);
     }
 
-    /* small helper so text wraps nicely like screenshot */
+    .sideNav a:hover{
+      color: rgba(255,255,255,.92);
+      transform: translateY(-1px);
+    }
+
     .sideNav .label{
       display:inline-block;
       max-width: 130px;
@@ -618,40 +693,27 @@
 
       <div class="grid">
         <a class="card" href="portfolio/projects/cms-web-infographic">
-            <div class="thumb">
-                <img src="assets/images/cms-thumb.jpg" alt="CMS Web Infographic thumbnail" >
-                <div class="blurFade"></div>
+          <div class="thumb">
+            <img src="assets/images/cms-thumb.jpg" alt="CMS Web Infographic thumbnail" >
+            <div class="blurFade"></div>
 
-                <div class="thumbText">
-                <p class="thumbTitle">CMS Web Infographic</p>
-                <p class="thumbSub">Interactive explainer on how the CMS detector works at CERN with scrollytelling.</p>
-                </div>
+            <div class="thumbText">
+              <p class="thumbTitle">CMS Web Infographic</p>
+              <p class="thumbSub">Interactive explainer on how the CMS detector works at CERN with scrollytelling.</p>
             </div>
-        </a>
-
-
-        <a class="card" href="portfolio/projects/cui-web-infographic/">
-            <div class="thumb">
-                <img src="assets/images/cui-thumb.jpg" alt="Videos and posts thumbnail">
-                <div class="blurFade"></div>
-
-                <div class="thumbText">
-                    <p class="thumbTitle">Videos &amp; Posts</p>
-                    <p class="thumbSub">Short-form science videos, outreach posts, and visual explainers for research communication.</p>
-                </div>
-            </div>
+          </div>
         </a>
 
         <a class="card" href="portfolio/projects/teaching.pdf">
-            <div class="thumb">
-                <img src="assets/images/teaching-thumb.jpg" alt="Teaching material thumbnail">
-                <div class="blurFade"></div>
+          <div class="thumb">
+            <img src="assets/images/teaching-thumb.jpg" alt="Teaching material thumbnail">
+            <div class="blurFade"></div>
 
-                <div class="thumbText">
-                    <p class="thumbTitle">Teaching Material</p>
-                    <p class="thumbSub">Lecture slides, worksheets, and interactive explanations designed for different audience levels.</p>
-                </div>
+            <div class="thumbText">
+              <p class="thumbTitle">Teaching Material</p>
+              <p class="thumbSub">Lecture slides, worksheets, and interactive explanations designed for different audience levels.</p>
             </div>
+          </div>
         </a>
       </div>
     </section>
@@ -686,36 +748,36 @@
 
     <section class="focusSection" id="masters-thesis">
       <h2>Master’s Thesis</h2>
-    
+
       <div class="grid">
         <!-- Master thesis PDF -->
         <div class="card">
           <div class="cardBody">
             <h3>Master's Thesis (PDF)</h3>
             <p>Sum Rules for the Extended Higgs Sector Models: A comparative analysis of 2HDM, GM and the Septet Model.</p>
-    
+
             <div class="cardActions">
-              <a class="btn" href="application/master_thesis.pdf" target="_blank" rel="noopener">
+              <a class="btn secondary" href="application/master_thesis.pdf" target="_blank" rel="noopener">
                 Open PDF
               </a>
-              <a class="btn" href="application/master_thesis.pdf" download>
+              <a class="btn secondary" href="application/master_thesis.pdf" download>
                 Download PDF
               </a>
             </div>
           </div>
         </div>
-    
+
         <!-- Slides PDF -->
         <div class="card">
           <div class="cardBody">
             <h3>Master's Colloquium Slides (PDF)</h3>
             <p>Open the slides in your browser or download the PDF.</p>
-    
+
             <div class="cardActions">
-              <a class="btn" href="application/thesis_ppt.pdf" target="_blank" rel="noopener">
+              <a class="btn secondary" href="application/thesis_ppt.pdf" target="_blank" rel="noopener">
                 Open PDF
               </a>
-              <a class="btn" href="application/thesis_ppt.pdf" download>
+              <a class="btn secondary" href="application/thesis_ppt.pdf" download>
                 Download PDF
               </a>
             </div>
@@ -723,7 +785,6 @@
         </div>
       </div>
     </section>
-
 
     <footer class="focusSection" id="footer">
       <div>© 2026 Sara Chopra · Hamburg · Science Communication &amp; Physics</div>
@@ -737,7 +798,7 @@
   <!-- PORTFOLIO MODAL -->
   <div class="modal" id="portfolioModal" aria-hidden="true">
     <div class="modalBackdrop" data-close="1"></div>
-  
+
     <div class="modalCard hasVideoBg" role="dialog" aria-modal="true" aria-labelledby="portfolioTitle">
       <!-- Background video INSIDE the modal -->
       <div class="modalVideoBg" aria-hidden="true">
@@ -745,76 +806,101 @@
           <source src="portfolio/projects/portfolio_bgvid.mp4" type="video/mp4">
         </video>
       </div>
-  
+
       <div class="modalTop">
         <h2 class="modalTitle" id="portfolioTitle">Portfolio</h2>
         <button class="modalClose" type="button" data-close="1">Close</button>
       </div>
-  
-      <div class="modalBody" style="max-width: unset; text-align: left;">
-        <p style="margin-top:0;">
-          Selected science communication and design work. Open the PDF or use quick links.
-        </p>
-  
-        <div class="modalGrid">
-          <!-- Portfolio PDF card -->
-          <div class="card">
-            <div class="thumb">
-              <!-- Use CUI thumbnail as Portfolio thumbnail -->
-              <img src="assets/images/cui-thumb.jpg" alt="Design portfolio thumbnail">
-              <div class="blurFade"></div>
-              <div class="thumbText">
-                <p class="thumbTitle">Design Portfolio (PDF)</p>
-                <p class="thumbSub">CUI work, club work, GirlUp, and selected design samples.</p>
-              </div>
-            </div>
-  
-            <div class="cardBody">
-              <h3>Portfolio PDF</h3>
-              <p>Open in browser or download.</p>
-              <div class="docRow">
-                <a class="docBtn" href="portfolio/projects/PORTFOLIO.pdf" target="_blank" rel="noopener">Open PDF</a>
-                <a class="docBtn" href="portfolio/projects/PORTFOLIO.pdf" download>Download</a>
-              </div>
-            </div>
-          </div>
-  
-          <!-- Links card -->
-          <div class="card">
-            <div class="cardBody">
-              <h3>Quick Links</h3>
-              <p>Replace placeholders with Instagram posts, reels, webpages, or folders.</p>
-  
-              <div class="linksGrid">
-                <div class="linkCol">
-                  <h4>CUI</h4>
-                  <ul class="linkList">
-                    <li><a href="#" target="_blank" rel="noopener">CUI Post (placeholder) <span class="linkTag">Link</span></a></li>
-                    <li><a href="#" target="_blank" rel="noopener">CUI Reel (placeholder) <span class="linkTag">Video</span></a></li>
-                    <li><a href="#" target="_blank" rel="noopener">CUI Web page (placeholder) <span class="linkTag">Web</span></a></li>
-                    <li><a href="#" target="_blank" rel="noopener">Campaign page (placeholder) <span class="linkTag">Web</span></a></li>
-                  </ul>
-                </div>
-  
-                <div class="linkCol">
-                  <h4>Past Works</h4>
-                  <ul class="linkList">
-                    <li><a href="#" target="_blank" rel="noopener">Physics Club (placeholder) <span class="linkTag">Design</span></a></li>
-                    <li><a href="#" target="_blank" rel="noopener">GirlUp (placeholder) <span class="linkTag">Design</span></a></li>
-                    <li><a href="#" target="_blank" rel="noopener">Video / Reel (placeholder) <span class="linkTag">Video</span></a></li>
-                    <li><a href="#" target="_blank" rel="noopener">Folder / Drive (placeholder) <span class="linkTag">Link</span></a></li>
-                  </ul>
+
+      <div class="modalScroll">
+        <div class="modalBody" style="max-width: unset; text-align: left;">
+          <p style="margin-top:0;">
+            Selected science communication and design work. Open the PDF or use quick links.
+          </p>
+
+          <div class="modalGrid">
+            <!-- Portfolio PDF (Featured Work style) -->
+            <a class="card" href="portfolio/projects/PORTFOLIO.pdf" target="_blank" rel="noopener">
+              <div class="thumb">
+                <img src="assets/images/cui-thumb.jpg" alt="Design portfolio thumbnail">
+                <div class="blurFade"></div>
+
+                <div class="thumbText">
+                  <p class="thumbTitle">Design Portfolio (PDF)</p>
+                  <p class="thumbSub">CUI work, club work, GirlUp, and selected design samples.</p>
                 </div>
               </div>
-  
+            </a>
+
+            <!-- Links card -->
+            <div class="card">
+              <div class="cardBody">
+                <h3>Quick Links</h3>
+                <p>Design work samples including instangram posts and videos.</p>
+
+                <div class="linksGrid">
+                  <div class="linkCol">
+                    <h4>CUI</h4>
+                    <ul class="linkList">
+                      <li>
+                        <a class="linkBtn" href="https://www.cui-advanced.uni-hamburg.de/" target="_blank" rel="noopener">
+                          Cluster of Excellence “Advanced Imaging of Matter” (CUI)
+                        </a>
+                      </li>
+                      <li>
+                        <a class="linkBtn" href="https://www.instagram.com/cui_advanced/" target="_blank" rel="noopener">
+                          CUI Instagram
+                        </a>
+                      </li>
+                      <li>
+                        <a class="linkBtn" href="https://www.instagram.com/cui_advanced/reel/C8E5ZV3vaRG/?hl=en" target="_blank" rel="noopener">
+                          Science City Day Reel
+                        </a>
+                      </li>
+                      <li>
+                        <a class="linkBtn" href="https://lecture2go.uni-hamburg.de/l2go/-/get/v/70463" target="_blank" rel="noopener">
+                          Diversity Interview (Blender Intro)
+                        </a>
+                      </li>
+
+                    </ul>
+                  </div>
+
+                  <div class="linkCol">
+                    <h4>Past Works</h4>
+                    <ul class="linkList">
+                      <li>
+                        <a class="linkBtn" href="https://www.instagram.com/kugelblitz_club/" target="_blank" rel="noopener">
+                          Physics Club “KugelBlitz” Instagram (including logo)
+                        </a>
+                      </li>
+                      <li>
+                        <a class="linkBtn" href="https://www.instagram.com/p/CDoOob9FcSz/?utm_source=ig_web_copy_link&igshid=MzRlODBiNWFlZA==" target="_blank" rel="noopener">
+                          GirlUp Empower: Post on Geisha culture
+                        </a>
+                      </li>
+                      <li>
+                        <a class="linkBtn" href="https://www.instagram.com/p/CCdVMi0FkPG/?utm_source=ig_web_copy_link&igshid=MzRlODBiNWFlZA==" target="_blank" rel="noopener">
+                          GirlUp Empower: Torches of Freedom
+                        </a>
+                      </li>
+                      <li>
+                        <a class="linkBtn" href="https://www.instagram.com/p/CCbXXYwl7Pd/?utm_source=ig_web_copy_link&igshid=MzRlODBiNWFlZA==" target="_blank" rel="noopener">
+                          GirlUp Empower: Truth of Indian Beauty through the years
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+              </div>
             </div>
-          </div>
+          </div><!-- /modalGrid -->
+
         </div>
-  
       </div>
     </div>
   </div>
-
 
   <!-- ABOUT MODAL -->
   <div class="modal" id="aboutModal" aria-hidden="true">
@@ -828,11 +914,11 @@
 
       <div class="modalBody">
         <p>
-          M.Sc. Physics graduate from Universität Hamburg, specialised in Accelerator and Particle Physics. My master’s thesis explored sum rules in extended Higgs models and their phenomenological applications. I currently work as a student helper in PR and communications at the Cluster of Excellence “Advanced Imaging of Matter” (CUI), supporting research outreach through visual design, written content, and digital formats. 
-        <p>
+          M.Sc. Physics graduate from Universität Hamburg, specialised in Accelerator and Particle Physics. My master’s thesis explored sum rules in extended Higgs models and their phenomenological applications. I currently work as a student helper in PR and communications at the Cluster of Excellence “Advanced Imaging of Matter” (CUI), supporting research outreach through visual design, written content, and digital formats.
+        </p>
 
-        </p> 
-            I aim to combine scientific rigour with strong design and technical skills to make complex topics clear, accurate, and accessible for specialist and non-specialist audiences. This website presents selected work, including interactive web explainers, graphics, teaching materials, and thesis-related outputs.
+        <p>
+          I aim to combine scientific rigour with strong design and technical skills to make complex topics clear, accurate, and accessible for specialist and non-specialist audiences. This website presents selected work, including interactive web explainers, graphics, teaching materials, and thesis-related outputs.
         </p>
       </div>
     </div>
@@ -863,7 +949,7 @@
     // Portfolio modal
     const portfolioBtn = document.getElementById("portfolioBtn");
     const portfolioModal = document.getElementById("portfolioModal");
-    
+
     function openPortfolio(){
       portfolioModal.classList.add("is-open");
       portfolioModal.setAttribute("aria-hidden","false");
@@ -872,21 +958,20 @@
       portfolioModal.classList.remove("is-open");
       portfolioModal.setAttribute("aria-hidden","true");
     }
-    
+
     if (portfolioBtn) portfolioBtn.addEventListener("click", openPortfolio);
-    
+
     if (portfolioModal){
       portfolioModal.addEventListener("click", (e) => {
         if (e.target && e.target.getAttribute("data-close")) closePortfolio();
       });
     }
-    
+
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && portfolioModal && portfolioModal.classList.contains("is-open")){
         closePortfolio();
       }
     });
-
 
     // Focus blur + left nav highlighting (ONLY real sections)
     const focusTargets = ["top", "featured-work", "application-documents", "masters-thesis"]
@@ -900,31 +985,31 @@
     const navThesis = document.getElementById("navThesis");
 
     function setFocus(activeId){
-    // combine TOP + FEATURED as one focus group
-    const combinedId = (activeId === "top") ? "featured-work" : activeId;
+      // combine TOP + FEATURED as one focus group
+      const combinedId = (activeId === "top") ? "featured-work" : activeId;
 
-    allFocusSections.forEach(sec => {
+      allFocusSections.forEach(sec => {
         const isActive = (sec.id === combinedId) || (sec.id === "top" && combinedId === "featured-work");
         sec.classList.toggle("is-focus", isActive);
         sec.classList.toggle("is-dim", !isActive);
-    });
+      });
 
-    // Footer should feel "together" with Master’s Thesis
-    if (footer){
+      // Footer should feel "together" with Master’s Thesis
+      if (footer){
         const footerActive = (combinedId === "masters-thesis");
         footer.classList.toggle("is-focus", footerActive);
         footer.classList.toggle("is-dim", !footerActive);
-    }
+      }
     }
 
     function setNav(activeId){
-    const combinedId = (activeId === "top") ? "featured-work" : activeId;
+      const combinedId = (activeId === "top") ? "featured-work" : activeId;
 
-    [navFeatured, navApp, navThesis].forEach(a => a && a.classList.remove("is-active"));
+      [navFeatured, navApp, navThesis].forEach(a => a && a.classList.remove("is-active"));
 
-    if (combinedId === "featured-work" && navFeatured) navFeatured.classList.add("is-active");
-    if (combinedId === "application-documents" && navApp) navApp.classList.add("is-active");
-    if (combinedId === "masters-thesis" && navThesis) navThesis.classList.add("is-active");
+      if (combinedId === "featured-work" && navFeatured) navFeatured.classList.add("is-active");
+      if (combinedId === "application-documents" && navApp) navApp.classList.add("is-active");
+      if (combinedId === "masters-thesis" && navThesis) navThesis.classList.add("is-active");
     }
 
     // Prevent "blur stuck" after clicking nav
