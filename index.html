@@ -75,6 +75,48 @@
       justify-content:center;
     }
 
+    /* Portfolio modal background video (ONLY inside modal) */
+    .modalCard.hasVideoBg{
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* video layer behind modal content */
+    .modalVideoBg{
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.50; /* 50% transparency */
+    }
+    
+    .modalVideoBg video{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(1.05) contrast(1.05);
+    }
+    
+    /* dark overlay so text stays readable */
+    .modalVideoBg::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(900px 450px at 20% -10%, rgba(42,168,255,0.18), transparent 55%),
+        radial-gradient(700px 420px at 100% 20%, rgba(53,51,205,0.14), transparent 55%),
+        rgba(10,12,16,0.72);
+    }
+    
+    /* ensure modal content renders ABOVE the video */
+    .modalCard.hasVideoBg .modalTop,
+    .modalCard.hasVideoBg .modalBody{
+      position: relative;
+      z-index: 1;
+    }
+
+
     /* HERO CTA BUTTONS: bigger */
     .btn{
     display:inline-flex;
@@ -565,7 +607,7 @@
 
       <div class="cta">
         <button class="btn secondary" type="button" id="aboutBtn">About</button>
-        <a class="btn primary" href="portfolio/">View Portfolio</a>
+        <button class="btn primary" type="button" id="portfolioBtn">View Portfolio</button>
         <a class="btn secondary" href="#application-documents">Application Documents</a>
         <a class="btn secondary" href="#masters-thesis">Master’s Thesis</a>
       </div>
@@ -692,6 +734,88 @@
 
   </div>
 
+  <!-- PORTFOLIO MODAL -->
+  <div class="modal" id="portfolioModal" aria-hidden="true">
+    <div class="modalBackdrop" data-close="1"></div>
+  
+    <div class="modalCard hasVideoBg" role="dialog" aria-modal="true" aria-labelledby="portfolioTitle">
+      <!-- Background video INSIDE the modal -->
+      <div class="modalVideoBg" aria-hidden="true">
+        <video autoplay muted loop playsinline preload="metadata">
+          <source src="portfolio/projects/portfolio_bgvid.mp4" type="video/mp4">
+        </video>
+      </div>
+  
+      <div class="modalTop">
+        <h2 class="modalTitle" id="portfolioTitle">Portfolio</h2>
+        <button class="modalClose" type="button" data-close="1">Close</button>
+      </div>
+  
+      <div class="modalBody" style="max-width: unset; text-align: left;">
+        <p style="margin-top:0;">
+          Selected science communication and design work. Open the PDF or use quick links.
+        </p>
+  
+        <div class="modalGrid">
+          <!-- Portfolio PDF card -->
+          <div class="card">
+            <div class="thumb">
+              <!-- Use CUI thumbnail as Portfolio thumbnail -->
+              <img src="assets/images/cui-thumb.jpg" alt="Design portfolio thumbnail">
+              <div class="blurFade"></div>
+              <div class="thumbText">
+                <p class="thumbTitle">Design Portfolio (PDF)</p>
+                <p class="thumbSub">CUI work, club work, GirlUp, and selected design samples.</p>
+              </div>
+            </div>
+  
+            <div class="cardBody">
+              <h3>Portfolio PDF</h3>
+              <p>Open in browser or download.</p>
+              <div class="docRow">
+                <a class="docBtn" href="portfolio/projects/PORTFOLIO.pdf" target="_blank" rel="noopener">Open PDF</a>
+                <a class="docBtn" href="portfolio/projects/PORTFOLIO.pdf" download>Download</a>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Links card -->
+          <div class="card">
+            <div class="cardBody">
+              <h3>Quick Links</h3>
+              <p>Replace placeholders with Instagram posts, reels, webpages, or folders.</p>
+  
+              <div class="linksGrid">
+                <div class="linkCol">
+                  <h4>CUI</h4>
+                  <ul class="linkList">
+                    <li><a href="#" target="_blank" rel="noopener">CUI Post (placeholder) <span class="linkTag">Link</span></a></li>
+                    <li><a href="#" target="_blank" rel="noopener">CUI Reel (placeholder) <span class="linkTag">Video</span></a></li>
+                    <li><a href="#" target="_blank" rel="noopener">CUI Web page (placeholder) <span class="linkTag">Web</span></a></li>
+                    <li><a href="#" target="_blank" rel="noopener">Campaign page (placeholder) <span class="linkTag">Web</span></a></li>
+                  </ul>
+                </div>
+  
+                <div class="linkCol">
+                  <h4>Past Works</h4>
+                  <ul class="linkList">
+                    <li><a href="#" target="_blank" rel="noopener">Physics Club (placeholder) <span class="linkTag">Design</span></a></li>
+                    <li><a href="#" target="_blank" rel="noopener">GirlUp (placeholder) <span class="linkTag">Design</span></a></li>
+                    <li><a href="#" target="_blank" rel="noopener">Video / Reel (placeholder) <span class="linkTag">Video</span></a></li>
+                    <li><a href="#" target="_blank" rel="noopener">Folder / Drive (placeholder) <span class="linkTag">Link</span></a></li>
+                  </ul>
+                </div>
+              </div>
+  
+            </div>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+
+
   <!-- ABOUT MODAL -->
   <div class="modal" id="aboutModal" aria-hidden="true">
     <div class="modalBackdrop" data-close="1"></div>
@@ -735,6 +859,34 @@
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && aboutModal.classList.contains("is-open")) closeAbout();
     });
+
+    // Portfolio modal
+    const portfolioBtn = document.getElementById("portfolioBtn");
+    const portfolioModal = document.getElementById("portfolioModal");
+    
+    function openPortfolio(){
+      portfolioModal.classList.add("is-open");
+      portfolioModal.setAttribute("aria-hidden","false");
+    }
+    function closePortfolio(){
+      portfolioModal.classList.remove("is-open");
+      portfolioModal.setAttribute("aria-hidden","true");
+    }
+    
+    if (portfolioBtn) portfolioBtn.addEventListener("click", openPortfolio);
+    
+    if (portfolioModal){
+      portfolioModal.addEventListener("click", (e) => {
+        if (e.target && e.target.getAttribute("data-close")) closePortfolio();
+      });
+    }
+    
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && portfolioModal && portfolioModal.classList.contains("is-open")){
+        closePortfolio();
+      }
+    });
+
 
     // Focus blur + left nav highlighting (ONLY real sections)
     const focusTargets = ["top", "featured-work", "application-documents", "masters-thesis"]
