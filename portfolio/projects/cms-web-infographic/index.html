@@ -461,6 +461,53 @@
       font-size: 11px;
     }
 
+    .credits-panel {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 1000;
+      width: min(360px, calc(100vw - 36px));
+      color: #f7f3ea;
+      background: rgba(7, 31, 55, 0.96);
+      border: 1px solid rgba(145, 202, 255, 0.45);
+      border-radius: 12px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.28);
+    }
+    
+    .credits-panel summary {
+      padding: 11px 15px;
+      color: #d9efff;
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+    }
+    
+    .credits-panel summary::-webkit-details-marker {
+      display: none;
+    }
+    
+    .credits-content {
+      max-height: 60vh;
+      padding: 0 16px 16px;
+      overflow-y: auto;
+      font-size: 0.78rem;
+      line-height: 1.55;
+    }
+    
+    .credits-content h3 {
+      margin: 14px 0 5px;
+      color: #9ed4ff;
+      font-size: 0.82rem;
+    }
+    
+    .credits-content ul {
+      padding-left: 18px;
+    }
+    
+    .credits-content a {
+      color: #9ed4ff;
+    }
+
     .photoCornerBtn{
       position: absolute;
       z-index: 4;
@@ -1124,10 +1171,87 @@
       if (e.key === "Escape" && photoModal.classList.contains("is-open")) closePhotoModal();
     });
   </script>
-  <p class="page-credit">
-    Visual and technical sources: CMS Collaboration.
-    <a href="https://cms.cern/detector" target="_blank" rel="noopener">Credits</a>
-  </p>
+  <details class="credits-panel">
+    <summary>Credits &amp; sources</summary>
+  
+    <div class="credits-content">
+      <p>
+        Independent educational project created by Sara Chopra.
+        This is not an official CERN or CMS website and does not imply
+        endorsement by CERN or the CMS Collaboration.
+      </p>
+  
+      <h3>Information sources</h3>
+      <ul>
+        <li>
+          <a href="https://cms.cern/news/detector-overview"
+             target="_blank" rel="noopener">
+            CMS detector overview
+          </a>
+        </li>
+        <li>
+          <a href="https://cms.cern/detector/bending-particles"
+             target="_blank" rel="noopener">
+            Bending particles
+          </a>
+        </li>
+        <li>
+          <a href="https://cms.cern/detector/identifying-tracks"
+             target="_blank" rel="noopener">
+            Identifying tracks
+          </a>
+        </li>
+        <li>
+          <a href="https://cms.cern/detector/measuring-energy"
+             target="_blank" rel="noopener">
+            Measuring energy
+          </a>
+        </li>
+        <li>
+          <a href="https://cms.cern/detector/detecting-muons"
+             target="_blank" rel="noopener">
+            Detecting muons
+          </a>
+        </li>
+      </ul>
+  
+      <h3>Visual sources</h3>
+      <ul>
+        <li>
+          Detector drawings: David Barney and Sergio Cittolin,
+          CMS Collaboration/CERN.
+          <a href="https://cms-docdb.cern.ch/cgi-bin/PublicDocDB/ShowDocument?docid=2715"
+             target="_blank" rel="noopener">Source</a>
+        </li>
+        <li>
+          Diphoton event display: CMS Collaboration/CERN.
+          <a href="https://cms.cern/sites/default/files/field/image/gammagamma_run194108_evt564224000_ispy_3d-annotated-2.png"
+             target="_blank" rel="noopener">Source</a>
+        </li>
+        <li>
+          CMS detector photograph: CERN/CMS Collaboration.
+          <a href="https://cms.cern/sites/default/files/field/image/CMS_photo_3_courtesy_of_CERN.jpg"
+             target="_blank" rel="noopener">Source</a>
+        </li>
+        <li>
+          Muon-system diagram: CMS Collaboration/CERN.
+          <a href="https://cms.cern/detector/detecting-muons"
+             target="_blank" rel="noopener">Source</a>
+        </li>
+        <li>
+          Additional detector imagery and technical information:
+          CMS Collaboration/CERN.
+          <a href="https://cms.cern/detector"
+             target="_blank" rel="noopener">CMS detector website</a>
+        </li>
+      </ul>
+  
+      <p>
+        Web design, explanatory writing, annotations and original animations:
+        Sara Chopra.
+      </p>
+    </div>
+  </details>
 </body>
 </html>
 
